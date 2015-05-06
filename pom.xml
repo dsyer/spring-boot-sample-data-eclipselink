@@ -5,19 +5,22 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.2.0.BUILD-SNAPSHOT</version>
+		<version>1.2.3.RELEASE</version>
+        <relativePath/>
 	</parent>
+    
 	<artifactId>spring-boot-sample-data-eclipselink</artifactId>
+    
 	<name>spring-boot-sample-data-eclipselink</name>
-	<description>Spring Boot Data JPA Sample</description>
-	<url>http://projects.spring.io/spring-boot/</url>
-	<organization>
-		<name>Pivotal Software, Inc.</name>
-		<url>http://www.spring.io</url>
-	</organization>
-	<properties>
-		<main.basedir>${basedir}/../..</main.basedir>
-	</properties>
+	<description>Spring Boot Data JPA Sample (EclipseLink)</description>
+    
+    <properties>
+        <!-- can also be 1.8 -->
+        <java.version>1.7</java.version>
+        <eclipselink.version>2.6.0</eclipselink.version>
+        <springloaded.version>1.2.3.RELEASE</springloaded.version>
+    </properties>    
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -32,7 +35,7 @@
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
-			<version>2.5.2</version>
+			<version>${eclipselink.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -51,6 +54,16 @@
 	</dependencies>
 	<build>
 		<plugins>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -72,7 +85,7 @@
 					<dependency>
 						<groupId>org.springframework</groupId>
 						<artifactId>springloaded</artifactId>
-						<version>1.2.0.RELEASE</version>
+						<version>${springloaded.version}</version>
 					</dependency>
 					<dependency>
 						<groupId>org.springframework</groupId>
@@ -81,7 +94,14 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<agent>${settings.localRepository}/org/springframework/spring-instrument/${spring.version}/spring-instrument-${spring.version}.jar</agent>
+                    <!-- Normally you don't need to setup springloaded as Spring Boot Maven plugin
+                         will detect its dependency and register it appropriately.
+                         But we have already added the spring-instrument agent, so we will have to add springloaded explictly. -->               
+					<agent>
+                        <agent>${settings.localRepository}/org/springframework/spring-instrument/${spring.version}/spring-instrument-${spring.version}.jar</agent>
+                        <agent>${settings.localRepository}/org/springframework/springloaded/${springloaded.version}/springloaded-${springloaded.version}.jar</agent>
+                    </agent>
+                    <noverify>true</noverify>
 				</configuration>
 			</plugin>
 		</plugins>
