@@ -9,14 +9,15 @@
         <relativePath/>
 	</parent>
     
-	<artifactId>spring-boot-sample-data-eclipselink</artifactId>
+	<artifactId>spring-boot-sample-data-eclipselink-war</artifactId>
     
-	<name>spring-boot-sample-data-eclipselink</name>
-	<description>Spring Boot Data JPA Sample (EclipseLink)</description>
+    <packaging>war</packaging>
+    
+	<name>spring-boot-sample-data-eclipselink-war</name>
+	<description>Spring Boot Data JPA Sample (EclipseLink, WAR-Deployment, Eclipse IDE)</description>
     
     <properties>
-        <!-- can also be 1.8 -->
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <eclipselink.version>2.6.0</eclipselink.version>
         <springloaded.version>1.2.3.RELEASE</springloaded.version>
     </properties>    
@@ -41,6 +42,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+        
+        <!-- Explicitly define tomcat dependencies as provided to exclude them from war-file.
+             But the war-file still stays executable as Spring Boot Plugin will keep
+             provided dependencies under /WEB-INF/lib-provided  
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+                
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -63,7 +75,32 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
-        
+
+            <plugin>
+                <groupId>de.empulse.eclipselink</groupId>
+                <artifactId>staticweave-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>weave</goal>
+                        </goals>
+                        <configuration>
+                            <persistenceXMLLocation>META-INF/persistence.xml</persistenceXMLLocation>
+                            <logLevel>INFO</logLevel>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.eclipse.persistence</groupId>
+                        <artifactId>org.eclipse.persistence.jpa</artifactId>
+                        <version>${eclipselink.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+                    
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -94,6 +131,16 @@
 					</dependency>
 				</dependencies>
 				<configuration>
+                    <!--
+                        Eclipse:
+                        If Eclipse configured to refresh the workspace automatically,
+                        "mvn spring-boot:run" can fail
+                        because Eclipse will copy resources into /target/classes after Boot Plugin deleted them,
+                        so Spring Boot will pick up 2 schema.sql and will try execute both of them.
+                        This option tells Boot Plugin not to use /src/main/resources directly.
+                    -->
+                    <addResources>false</addResources>
+                
                     <!-- Normally you don't need to setup springloaded as Spring Boot Maven plugin
                          will detect its dependency and register it appropriately.
                          But we have already added the spring-instrument agent, so we will have to add springloaded explictly. -->               
@@ -105,5 +152,36 @@
 				</configuration>
 			</plugin>
 		</plugins>
+        
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>de.empulse.eclipselink</groupId>
+                                        <artifactId>staticweave-maven-plugin</artifactId>
+                                        <versionRange>[1.0,)</versionRange>
+                                        <goals>
+                                            <goal>weave</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+                
 	</build>
 </project>
