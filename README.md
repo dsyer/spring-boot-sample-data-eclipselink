@@ -51,3 +51,7 @@ This setup can run all possible ways:
   * either deploy `target\projectname.war`
   * or run `java -jar target\projectname.war` 
 
+### EclipseLink Logging
+
+`Slf4jSessionLogger` included that forwards EclipseLink logging to Slf4J. Read the javadoc and `application.yml` for more information.
+
