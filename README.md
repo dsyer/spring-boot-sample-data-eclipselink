@@ -51,7 +51,8 @@ This setup can run all possible ways:
   * either deploy `target\projectname.war`
   * or run `java -jar target\projectname.war` 
 
-### EclipseLink Logging
+### Logging
 
-`Slf4jSessionLogger` included that forwards EclipseLink logging to Slf4J. Read the javadoc and `application.yml` for more information.
+* `Slf4jSessionLogger` included that forwards EclipseLink logging to Slf4J. Read the javadoc and `application.yml` for more information.
+* `logback-custom.xml` can be activated by uncommenting environment variables in /webapp/META-INF/context.xml *(works only when running as deployment on Tomcat)*
 
