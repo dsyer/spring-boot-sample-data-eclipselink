@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+<!--
+    See logback-custom.xml for explanation.
+     
+    <Environment name="logging.config" value="classpath:logback-custom.xml" type="java.lang.String" />
+    <Environment name="spray.application.id" value="boot-eclipselink.sample.org" type="java.lang.String" />
+-->    
+</Context>

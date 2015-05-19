@@ -16,36 +16,21 @@
 
 package sample.data.jpa;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
-import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 
-@Configuration
-@ComponentScan
-@EnableAutoConfiguration
-public class SampleDataJpaApplication extends JpaBaseConfiguration {
+@SpringBootApplication
+public class SampleDataJpaApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(SampleDataJpaApplication.class, args);
 	}
-	
-	@Override
-	protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
-		EclipseLinkJpaVendorAdapter adapter = new EclipseLinkJpaVendorAdapter();
-		return adapter;
-	}
 
-	@Override
-	protected Map<String, Object> getVendorProperties() {
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		return map;
-	}
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(SampleDataJpaApplication.class);
+    }	
 
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Shows how to use a custom logback configuration.
+    
+    You can turn this file on in /META-INF/context.xml
+    ! Works only when running as deployment on Tomcat !
+    It also shows how to use a property from JNDI (context.xml/Environment). 
+-->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <insertFromJNDI env-entry-name="java:comp/env/spray.application.id" as="applicationId" />
+    <contextName>${applicationId}</contextName>
+    <!-- Now you can use ${applicationId} in all of the logback configuration -->
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d{HH:mm:ss.SSS} ${applicationId} %5level: %-40.40logger{39} - %m%n%wex</Pattern>
+        </encoder>
+    </appender>
+    
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+    
+</configuration>

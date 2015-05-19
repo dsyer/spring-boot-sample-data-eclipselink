@@ -1,0 +1,10 @@
+
+# forward EclipseLink logging to Slf4J
+spring.jpa:
+  properties:
+    eclipselink.logging.logger: sample.data.jpa.util.Slf4jSessionLogger
+    
+# turns on sql logging
+logging.level:
+  org.eclipse.persistence.logging.sql: DEBUG
+  

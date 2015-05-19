@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence version="2.1"
+    xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+    <!--
+        This file is required for the staticweave-maven-plugin.
+        It should be named 'default' so Spring will not create 2 EMFs.
+    -->
+
+    <persistence-unit name="default">
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    </persistence-unit>
+
+</persistence>
